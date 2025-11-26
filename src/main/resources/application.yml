@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: agent-playground
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        model: gpt-3.5-turbo
+    
+    google:
+      ai:
+        gemini:
+          api-key: ${GEMINI_API_KEY:}
+          chat:
+            model: gemini-pro
+
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        model: claude-3-opus-20240229
+
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: ${OPENAI_API_KEY:}
+      model-name: gpt-3.5-turbo
+  google-ai-gemini:
+    chat-model:
+      api-key: ${GEMINI_API_KEY:}
+      model-name: gemini-pro
+  anthropic:
+    chat-model:
+      api-key: ${ANTHROPIC_API_KEY:}
+      model-name: claude-3-opus-20240229
+
+server:
+  port: 8080
