@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: agent-playground
 
@@ -8,10 +10,11 @@ spring:
       chat:
         model: gpt-3.5-turbo
     
-    google:
+    vertex:
       ai:
         gemini:
-          api-key: ${GEMINI_API_KEY:}
+          project-id: ${VERTEX_AI_PROJECT_ID:}
+          location: ${VERTEX_AI_LOCATION:us-central1}
           chat:
             model: gemini-pro
 
@@ -25,9 +28,10 @@ langchain4j:
     chat-model:
       api-key: ${OPENAI_API_KEY:}
       model-name: gpt-3.5-turbo
-  google-ai-gemini:
+  vertex-ai-gemini:
     chat-model:
-      api-key: ${GEMINI_API_KEY:}
+      project-id: ${VERTEX_AI_PROJECT_ID:}
+      location: ${VERTEX_AI_LOCATION:us-central1}
       model-name: gemini-pro
   anthropic:
     chat-model:

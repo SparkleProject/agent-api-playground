@@ -1,40 +1,40 @@
 package com.example.agentplayground.service;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class AiService {
 
-    private final OpenAiChatModel openAiChatModel;
-    private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
-    private final AnthropicChatModel anthropicChatModel;
+    private final Map<String, ChatModel> models;
 
     @Autowired
     public AiService(OpenAiChatModel openAiChatModel,
             VertexAiGeminiChatModel vertexAiGeminiChatModel,
             AnthropicChatModel anthropicChatModel) {
-        this.openAiChatModel = openAiChatModel;
-        this.vertexAiGeminiChatModel = vertexAiGeminiChatModel;
-        this.anthropicChatModel = anthropicChatModel;
+        this.models = new HashMap<>();
+        this.models.put("openai", openAiChatModel);
+        this.models.put("gemini", vertexAiGeminiChatModel);
+        this.models.put("claude", anthropicChatModel);
     }
 
-    public String chatWithOpenAi(String message) {
-        return openAiChatModel.call(message);
+    public Set<String> getSupportedModels() {
+        return models.keySet();
     }
 
-    public String chatWithGemini(String message) {
-        return vertexAiGeminiChatModel.call(message);
-    }
-
-    public String chatWithClaude(String message) {
-        return anthropicChatModel.call(message);
+    public String chat(String modelName, String message) {
+        ChatModel model = models.get(modelName);
+        if (model == null) {
+            throw new IllegalArgumentException("Unsupported model: " + modelName);
+        }
+        return model.call(message);
     }
 }

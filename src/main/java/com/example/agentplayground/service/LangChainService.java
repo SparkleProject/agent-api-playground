@@ -7,31 +7,34 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 @Service
 public class LangChainService {
 
-    private final ChatLanguageModel openAiChatModel;
-    private final ChatLanguageModel vertexAiGeminiChatModel;
-    private final ChatLanguageModel anthropicChatModel;
+    private final Map<String, ChatLanguageModel> models;
 
     @Autowired
     public LangChainService(OpenAiChatModel openAiChatModel,
             VertexAiGeminiChatModel vertexAiGeminiChatModel,
             AnthropicChatModel anthropicChatModel) {
-        this.openAiChatModel = openAiChatModel;
-        this.vertexAiGeminiChatModel = vertexAiGeminiChatModel;
-        this.anthropicChatModel = anthropicChatModel;
+        this.models = new HashMap<>();
+        this.models.put("openai", openAiChatModel);
+        this.models.put("gemini", vertexAiGeminiChatModel);
+        this.models.put("claude", anthropicChatModel);
     }
 
-    public String chatWithOpenAi(String message) {
-        return openAiChatModel.generate(message);
+    public Set<String> getSupportedModels() {
+        return models.keySet();
     }
 
-    public String chatWithGemini(String message) {
-        return vertexAiGeminiChatModel.generate(message);
-    }
-
-    public String chatWithClaude(String message) {
-        return anthropicChatModel.generate(message);
+    public String chat(String modelName, String message) {
+        ChatLanguageModel model = models.get(modelName);
+        if (model == null) {
+            throw new IllegalArgumentException("Unsupported model: " + modelName);
+        }
+        return model.generate(message);
     }
 }
