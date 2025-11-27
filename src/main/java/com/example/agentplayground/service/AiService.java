@@ -17,13 +17,19 @@ public class AiService {
     private final Map<String, ChatModel> models;
 
     @Autowired
-    public AiService(OpenAiChatModel openAiChatModel,
-            VertexAiGeminiChatModel vertexAiGeminiChatModel,
-            AnthropicChatModel anthropicChatModel) {
+    public AiService(@Autowired(required = false) OpenAiChatModel openAiChatModel,
+            @Autowired(required = false) VertexAiGeminiChatModel vertexAiGeminiChatModel,
+            @Autowired(required = false) AnthropicChatModel anthropicChatModel) {
         this.models = new HashMap<>();
-        this.models.put("openai", openAiChatModel);
-        this.models.put("gemini", vertexAiGeminiChatModel);
-        this.models.put("claude", anthropicChatModel);
+        if (openAiChatModel != null) {
+            this.models.put("openai", openAiChatModel);
+        }
+        if (vertexAiGeminiChatModel != null) {
+            this.models.put("gemini", vertexAiGeminiChatModel);
+        }
+        if (anthropicChatModel != null) {
+            this.models.put("claude", anthropicChatModel);
+        }
     }
 
     public Set<String> getSupportedModels() {

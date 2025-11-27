@@ -1,4 +1,12 @@
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+      - org.springframework.ai.autoconfigure.vertexai.gemini.VertexAiGeminiAutoConfiguration
+      - org.springframework.ai.autoconfigure.anthropic.AnthropicAutoConfiguration
+      - dev.langchain4j.openai.spring.AutoConfig
+      - dev.langchain4j.vertexai.spring.AutoConfig
+      - dev.langchain4j.anthropic.spring.AutoConfig
   main:
     allow-bean-definition-overriding: true
   application:
@@ -9,6 +17,14 @@ spring:
       api-key: ${OPENAI_API_KEY:}
       chat:
         model: gpt-3.5-turbo
+    
+    azure:
+      openai:
+        api-key: ${AZURE_OPENAI_API_KEY:}
+        endpoint: ${AZURE_OPENAI_ENDPOINT:}
+        chat:
+          options:
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:}
     
     vertex:
       ai:
@@ -28,6 +44,11 @@ langchain4j:
     chat-model:
       api-key: ${OPENAI_API_KEY:}
       model-name: gpt-3.5-turbo
+  azure-open-ai:
+    chat-model:
+      api-key: ${AZURE_OPENAI_API_KEY:}
+      endpoint: ${AZURE_OPENAI_ENDPOINT:}
+      deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:}
   vertex-ai-gemini:
     chat-model:
       project-id: ${VERTEX_AI_PROJECT_ID:}
