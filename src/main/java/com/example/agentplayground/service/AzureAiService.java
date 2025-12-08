@@ -14,12 +14,8 @@ public class AzureAiService {
     private final Map<String, AzureOpenAiChatModel> models;
 
     @Autowired
-    public AzureAiService(@Autowired(required = false) AzureOpenAiChatModel azureOpenAiChatModel) {
-        this.models = new HashMap<>();
-        if (azureOpenAiChatModel != null) {
-            this.models.put("gpt-4.1-mini", azureOpenAiChatModel);
-            this.models.put("gpt-4.1", azureOpenAiChatModel);
-        }
+    public AzureAiService(Map<String, AzureOpenAiChatModel> models) {
+        this.models = models;
     }
 
     public Set<String> getSupportedModels() {
