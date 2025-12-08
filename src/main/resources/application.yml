@@ -11,6 +11,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: agent-playground
+  config:
+    import: optional:classpath:application-local.properties
 
   ai:
     openai:

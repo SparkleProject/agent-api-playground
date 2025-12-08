@@ -6,3 +6,5 @@ bin/
 *.iml
 .DS_Store
 target/
+application-local.properties
+
