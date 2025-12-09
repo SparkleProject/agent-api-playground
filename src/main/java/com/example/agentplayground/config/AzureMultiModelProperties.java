@@ -12,18 +12,50 @@ import java.util.Map;
 @Data
 public class AzureMultiModelProperties {
 
+    private String apiKey;
+    private String endpoint;
     private Map<String, AzureModelConfig> models = new HashMap<>();
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public Map<String, AzureModelConfig> getModels() {
+        return models;
+    }
+
+    public void setModels(Map<String, AzureModelConfig> models) {
+        this.models = models;
+    }
 
     @org.springframework.context.annotation.Bean
     public Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> azureOpenAiChatModels() {
         Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> chatModels = new HashMap<>();
         models.forEach((key, config) -> {
-            if (config.getApiKey() != null && !config.getApiKey().isBlank() &&
-                    config.getEndpoint() != null && !config.getEndpoint().isBlank() &&
+            String effectiveApiKey = (config.getApiKey() != null && !config.getApiKey().isBlank()) ? config.getApiKey()
+                    : this.apiKey;
+            String effectiveEndpoint = (config.getEndpoint() != null && !config.getEndpoint().isBlank())
+                    ? config.getEndpoint()
+                    : this.endpoint;
+
+            if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
+                    effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
                     config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
                 chatModels.put(config.getDeploymentName(), dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
-                        .apiKey(config.getApiKey())
-                        .endpoint(config.getEndpoint())
+                        .apiKey(effectiveApiKey)
+                        .endpoint(effectiveEndpoint)
                         .deploymentName(config.getDeploymentName())
                         .logRequestsAndResponses(true)
                         .build());
@@ -36,13 +68,19 @@ public class AzureMultiModelProperties {
     public Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> springAiChatModels() {
         Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> chatModels = new HashMap<>();
         models.forEach((key, config) -> {
-            if (config.getApiKey() != null && !config.getApiKey().isBlank() &&
-                    config.getEndpoint() != null && !config.getEndpoint().isBlank() &&
+            String effectiveApiKey = (config.getApiKey() != null && !config.getApiKey().isBlank()) ? config.getApiKey()
+                    : this.apiKey;
+            String effectiveEndpoint = (config.getEndpoint() != null && !config.getEndpoint().isBlank())
+                    ? config.getEndpoint()
+                    : this.endpoint;
+
+            if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
+                    effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
                     config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
 
                 com.azure.ai.openai.OpenAIClient openAIClient = new com.azure.ai.openai.OpenAIClientBuilder()
-                        .endpoint(config.getEndpoint())
-                        .credential(new com.azure.core.credential.AzureKeyCredential(config.getApiKey()))
+                        .endpoint(effectiveEndpoint)
+                        .credential(new com.azure.core.credential.AzureKeyCredential(effectiveApiKey))
                         .buildClient();
 
                 org.springframework.ai.azure.openai.AzureOpenAiChatOptions options = org.springframework.ai.azure.openai.AzureOpenAiChatOptions
@@ -55,10 +93,6 @@ public class AzureMultiModelProperties {
             }
         });
         return chatModels;
-    }
-
-    public Map<String, AzureModelConfig> getModels() {
-        return models;
     }
 
     @Data
