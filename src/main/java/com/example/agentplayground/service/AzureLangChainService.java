@@ -15,12 +15,9 @@ public class AzureLangChainService {
     private final Map<String, ChatLanguageModel> models;
 
     @Autowired
-    public AzureLangChainService(@Autowired(required = false) AzureOpenAiChatModel azureOpenAiChatModel) {
-        this.models = new HashMap<>();
-        if (azureOpenAiChatModel != null) {
-            this.models.put("gpt-4.1-mini", azureOpenAiChatModel);
-            this.models.put("gpt-4.1", azureOpenAiChatModel);
-        }
+    public AzureLangChainService(
+            @org.springframework.beans.factory.annotation.Value("#{azureOpenAiChatModels}") Map<String, AzureOpenAiChatModel> azureOpenAiChatModels) {
+        this.models = new HashMap<>(azureOpenAiChatModels);
     }
 
     public Set<String> getSupportedModels() {
