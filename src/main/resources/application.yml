@@ -32,15 +32,15 @@ spring:
           gpt-35-turbo:
             api-key: ${AZURE_OPENAI_API_KEY:}
             endpoint: ${AZURE_OPENAI_ENDPOINT:}
-            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:gpt-35-turbo}
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:}
           gpt-4:
              api-key: ${AZURE_OPENAI_GPT4_API_KEY:${AZURE_OPENAI_API_KEY:}}
              endpoint: ${AZURE_OPENAI_ENDPOINT:}
-             deployment-name: ${AZURE_OPENAI_GPT4_DEPLOYMENT_NAME:gpt-4}
+             deployment-name: ${AZURE_OPENAI_GPT4_DEPLOYMENT_NAME:}
           gpt-4-1:
              api-key: ${AZURE_OPENAI_GPT41_API_KEY:${AZURE_OPENAI_API_KEY:}}
              endpoint: ${AZURE_OPENAI_ENDPOINT:}
-             deployment-name: ${AZURE_OPENAI_GPT41_DEPLOYMENT_NAME:gpt-4.1}
+             deployment-name: ${AZURE_OPENAI_GPT41_DEPLOYMENT_NAME:}
     
     vertex:
       ai:

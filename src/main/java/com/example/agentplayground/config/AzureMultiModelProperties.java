@@ -14,6 +14,7 @@ public class AzureMultiModelProperties {
 
     private String apiKey;
     private String endpoint;
+    private String deploymentName;
     private Map<String, AzureModelConfig> models = new HashMap<>();
 
     public String getApiKey() {
@@ -30,6 +31,14 @@ public class AzureMultiModelProperties {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    public String getDeploymentName() {
+        return deploymentName;
+    }
+
+    public void setDeploymentName(String deploymentName) {
+        this.deploymentName = deploymentName;
     }
 
     public Map<String, AzureModelConfig> getModels() {
@@ -49,14 +58,16 @@ public class AzureMultiModelProperties {
             String effectiveEndpoint = (config.getEndpoint() != null && !config.getEndpoint().isBlank())
                     ? config.getEndpoint()
                     : this.endpoint;
+            String effectiveDeploymentName = (config.getDeploymentName() != null
+                    && !config.getDeploymentName().isBlank()) ? config.getDeploymentName() : this.deploymentName;
 
             if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
                     effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
-                    config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
-                chatModels.put(config.getDeploymentName(), dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
+                    effectiveDeploymentName != null && !effectiveDeploymentName.isBlank()) {
+                chatModels.put(effectiveDeploymentName, dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
                         .apiKey(effectiveApiKey)
                         .endpoint(effectiveEndpoint)
-                        .deploymentName(config.getDeploymentName())
+                        .deploymentName(effectiveDeploymentName)
                         .logRequestsAndResponses(true)
                         .build());
             }
@@ -73,10 +84,12 @@ public class AzureMultiModelProperties {
             String effectiveEndpoint = (config.getEndpoint() != null && !config.getEndpoint().isBlank())
                     ? config.getEndpoint()
                     : this.endpoint;
+            String effectiveDeploymentName = (config.getDeploymentName() != null
+                    && !config.getDeploymentName().isBlank()) ? config.getDeploymentName() : this.deploymentName;
 
             if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
                     effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
-                    config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
+                    effectiveDeploymentName != null && !effectiveDeploymentName.isBlank()) {
 
                 com.azure.ai.openai.OpenAIClient openAIClient = new com.azure.ai.openai.OpenAIClientBuilder()
                         .endpoint(effectiveEndpoint)
@@ -85,10 +98,10 @@ public class AzureMultiModelProperties {
 
                 org.springframework.ai.azure.openai.AzureOpenAiChatOptions options = org.springframework.ai.azure.openai.AzureOpenAiChatOptions
                         .builder()
-                        .withDeploymentName(config.getDeploymentName())
+                        .withDeploymentName(effectiveDeploymentName)
                         .build();
 
-                chatModels.put(config.getDeploymentName(),
+                chatModels.put(effectiveDeploymentName,
                         new org.springframework.ai.azure.openai.AzureOpenAiChatModel(openAIClient, options));
             }
         });
