@@ -18,12 +18,16 @@ public class AzureMultiModelProperties {
     public Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> azureOpenAiChatModels() {
         Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> chatModels = new HashMap<>();
         models.forEach((key, config) -> {
-            chatModels.put(config.getDeploymentName(), dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
-                    .apiKey(config.getApiKey())
-                    .endpoint(config.getEndpoint())
-                    .deploymentName(config.getDeploymentName())
-                    .logRequestsAndResponses(true)
-                    .build());
+            if (config.getApiKey() != null && !config.getApiKey().isBlank() &&
+                    config.getEndpoint() != null && !config.getEndpoint().isBlank() &&
+                    config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
+                chatModels.put(config.getDeploymentName(), dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
+                        .apiKey(config.getApiKey())
+                        .endpoint(config.getEndpoint())
+                        .deploymentName(config.getDeploymentName())
+                        .logRequestsAndResponses(true)
+                        .build());
+            }
         });
         return chatModels;
     }
