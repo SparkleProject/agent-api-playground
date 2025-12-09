@@ -32,6 +32,31 @@ public class AzureMultiModelProperties {
         return chatModels;
     }
 
+    @org.springframework.context.annotation.Bean
+    public Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> springAiChatModels() {
+        Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> chatModels = new HashMap<>();
+        models.forEach((key, config) -> {
+            if (config.getApiKey() != null && !config.getApiKey().isBlank() &&
+                    config.getEndpoint() != null && !config.getEndpoint().isBlank() &&
+                    config.getDeploymentName() != null && !config.getDeploymentName().isBlank()) {
+
+                com.azure.ai.openai.OpenAIClient openAIClient = new com.azure.ai.openai.OpenAIClientBuilder()
+                        .endpoint(config.getEndpoint())
+                        .credential(new com.azure.core.credential.AzureKeyCredential(config.getApiKey()))
+                        .buildClient();
+
+                org.springframework.ai.azure.openai.AzureOpenAiChatOptions options = org.springframework.ai.azure.openai.AzureOpenAiChatOptions
+                        .builder()
+                        .withDeploymentName(config.getDeploymentName())
+                        .build();
+
+                chatModels.put(config.getDeploymentName(),
+                        new org.springframework.ai.azure.openai.AzureOpenAiChatModel(openAIClient, options));
+            }
+        });
+        return chatModels;
+    }
+
     @Data
     public static class AzureModelConfig {
         private String apiKey;

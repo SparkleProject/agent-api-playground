@@ -14,7 +14,8 @@ public class AzureAiService {
     private final Map<String, AzureOpenAiChatModel> models;
 
     @Autowired
-    public AzureAiService(Map<String, AzureOpenAiChatModel> models) {
+    public AzureAiService(
+            @org.springframework.beans.factory.annotation.Value("#{springAiChatModels}") Map<String, AzureOpenAiChatModel> models) {
         this.models = models;
     }
 
