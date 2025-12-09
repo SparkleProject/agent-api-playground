@@ -25,12 +25,7 @@ public class AzureLangChainService {
     }
 
     public Set<String> getSupportedModels() {
-        return properties.getModels().values().stream()
-                .map(config -> (config.getDeploymentName() != null && !config.getDeploymentName().isBlank())
-                        ? config.getDeploymentName()
-                        : properties.getDeploymentName())
-                .filter(name -> name != null && !name.isBlank())
-                .collect(java.util.stream.Collectors.toSet());
+        return properties.getModels().keySet();
     }
 
     public String chat(String modelName, String message) {

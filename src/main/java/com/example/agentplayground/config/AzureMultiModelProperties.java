@@ -64,7 +64,7 @@ public class AzureMultiModelProperties {
             if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
                     effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
                     effectiveDeploymentName != null && !effectiveDeploymentName.isBlank()) {
-                chatModels.put(effectiveDeploymentName, dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
+                chatModels.put(key, dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
                         .apiKey(effectiveApiKey)
                         .endpoint(effectiveEndpoint)
                         .deploymentName(effectiveDeploymentName)
@@ -101,7 +101,7 @@ public class AzureMultiModelProperties {
                         .withDeploymentName(effectiveDeploymentName)
                         .build();
 
-                chatModels.put(effectiveDeploymentName,
+                chatModels.put(key,
                         new org.springframework.ai.azure.openai.AzureOpenAiChatModel(openAIClient, options));
             }
         });
