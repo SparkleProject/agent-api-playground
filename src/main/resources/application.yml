@@ -3,6 +3,7 @@ spring:
     exclude:
       - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
       - org.springframework.ai.autoconfigure.vertexai.gemini.VertexAiGeminiAutoConfiguration
+      - org.springframework.ai.autoconfigure.azure.openai.AzureOpenAiAutoConfiguration
       - org.springframework.ai.autoconfigure.anthropic.AnthropicAutoConfiguration
   main:
     allow-bean-definition-overriding: true
