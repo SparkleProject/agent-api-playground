@@ -20,10 +20,7 @@ spring:
         
         # Multi-model configuration
         models:
-          gpt-35-turbo:
-            api-key: ${AZURE_OPENAI_API_KEY:}
-            endpoint: ${AZURE_OPENAI_ENDPOINT:}
-            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:}
+
           gpt-4:
              api-key: ${AZURE_OPENAI_GPT4_API_KEY:${AZURE_OPENAI_API_KEY:}}
              endpoint: ${AZURE_OPENAI_ENDPOINT:}
