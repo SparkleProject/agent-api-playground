@@ -50,32 +50,6 @@ public class AzureMultiModelProperties {
     }
 
     @org.springframework.context.annotation.Bean
-    public Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> azureOpenAiChatModels() {
-        Map<String, dev.langchain4j.model.azure.AzureOpenAiChatModel> chatModels = new HashMap<>();
-        models.forEach((key, config) -> {
-            String effectiveApiKey = (config.getApiKey() != null && !config.getApiKey().isBlank()) ? config.getApiKey()
-                    : this.apiKey;
-            String effectiveEndpoint = (config.getEndpoint() != null && !config.getEndpoint().isBlank())
-                    ? config.getEndpoint()
-                    : this.endpoint;
-            String effectiveDeploymentName = (config.getDeploymentName() != null
-                    && !config.getDeploymentName().isBlank()) ? config.getDeploymentName() : this.deploymentName;
-
-            if (effectiveApiKey != null && !effectiveApiKey.isBlank() &&
-                    effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
-                    effectiveDeploymentName != null && !effectiveDeploymentName.isBlank()) {
-                chatModels.put(key, dev.langchain4j.model.azure.AzureOpenAiChatModel.builder()
-                        .apiKey(effectiveApiKey)
-                        .endpoint(effectiveEndpoint)
-                        .deploymentName(effectiveDeploymentName)
-                        .logRequestsAndResponses(true)
-                        .build());
-            }
-        });
-        return chatModels;
-    }
-
-    @org.springframework.context.annotation.Bean
     public Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> springAiChatModels() {
         Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> chatModels = new HashMap<>();
         models.forEach((key, config) -> {
