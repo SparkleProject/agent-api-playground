@@ -4,9 +4,6 @@ spring:
       - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
       - org.springframework.ai.autoconfigure.vertexai.gemini.VertexAiGeminiAutoConfiguration
       - org.springframework.ai.autoconfigure.anthropic.AnthropicAutoConfiguration
-      - dev.langchain4j.openai.spring.AutoConfig
-      - dev.langchain4j.vertexai.spring.AutoConfig
-      - dev.langchain4j.anthropic.spring.AutoConfig
   main:
     allow-bean-definition-overriding: true
   application:
@@ -15,13 +12,7 @@ spring:
     import: optional:classpath:application-local.properties
 
   ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:}
-      chat:
-        model: gpt-3.5-turbo
-    
     azure:
-
       openai:
         # Default/Single configuration (optional, if you want to keep it or just use the map)
         api-key: ${AZURE_OPENAI_API_KEY:}
@@ -41,39 +32,7 @@ spring:
              api-key: ${AZURE_OPENAI_GPT41_API_KEY:${AZURE_OPENAI_API_KEY:}}
              endpoint: ${AZURE_OPENAI_ENDPOINT:}
              deployment-name: ${AZURE_OPENAI_GPT41_DEPLOYMENT_NAME:}
-    
-    vertex:
-      ai:
-        gemini:
-          project-id: ${VERTEX_AI_PROJECT_ID:}
-          location: ${VERTEX_AI_LOCATION:us-central1}
-          chat:
-            model: gemini-pro
 
-    anthropic:
-      api-key: ${ANTHROPIC_API_KEY:}
-      chat:
-        model: claude-3-opus-20240229
-
-langchain4j:
-  open-ai:
-    chat-model:
-      api-key: ${OPENAI_API_KEY:}
-      model-name: gpt-3.5-turbo
-  azure-open-ai:
-    chat-model:
-      api-key: ${AZURE_OPENAI_API_KEY:}
-      endpoint: ${AZURE_OPENAI_ENDPOINT:}
-      deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:}
-  vertex-ai-gemini:
-    chat-model:
-      project-id: ${VERTEX_AI_PROJECT_ID:}
-      location: ${VERTEX_AI_LOCATION:us-central1}
-      model-name: gemini-pro
-  anthropic:
-    chat-model:
-      api-key: ${ANTHROPIC_API_KEY:}
-      model-name: claude-3-opus-20240229
 
 server:
   port: 8080
