@@ -1,6 +1,11 @@
 package com.example.agentplayground.config;
 
+import com.azure.ai.openai.OpenAIClient;
+import com.azure.ai.openai.OpenAIClientBuilder;
+import com.azure.core.credential.AzureKeyCredential;
 import lombok.Data;
+import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
+import org.springframework.ai.azure.openai.AzureOpenAiChatOptions;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,8 +55,8 @@ public class AzureMultiModelProperties {
     }
 
     @org.springframework.context.annotation.Bean
-    public Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> springAiChatModels() {
-        Map<String, org.springframework.ai.azure.openai.AzureOpenAiChatModel> chatModels = new HashMap<>();
+    public Map<String, AzureOpenAiChatModel> springAiChatModels() {
+        Map<String, AzureOpenAiChatModel> chatModels = new HashMap<>();
         models.forEach((key, config) -> {
             String effectiveApiKey = (config.getApiKey() != null && !config.getApiKey().isBlank()) ? config.getApiKey()
                     : this.apiKey;
@@ -65,18 +70,18 @@ public class AzureMultiModelProperties {
                     effectiveEndpoint != null && !effectiveEndpoint.isBlank() &&
                     effectiveDeploymentName != null && !effectiveDeploymentName.isBlank()) {
 
-                com.azure.ai.openai.OpenAIClient openAIClient = new com.azure.ai.openai.OpenAIClientBuilder()
+                OpenAIClient openAIClient = new OpenAIClientBuilder()
                         .endpoint(effectiveEndpoint)
-                        .credential(new com.azure.core.credential.AzureKeyCredential(effectiveApiKey))
+                        .credential(new AzureKeyCredential(effectiveApiKey))
                         .buildClient();
 
-                org.springframework.ai.azure.openai.AzureOpenAiChatOptions options = org.springframework.ai.azure.openai.AzureOpenAiChatOptions
+                AzureOpenAiChatOptions options = AzureOpenAiChatOptions
                         .builder()
                         .withDeploymentName(effectiveDeploymentName)
                         .build();
 
-                chatModels.put(key,
-                        new org.springframework.ai.azure.openai.AzureOpenAiChatModel(openAIClient, options));
+                chatModels.put(effectiveDeploymentName,
+                        new AzureOpenAiChatModel(openAIClient, options));
             }
         });
         return chatModels;

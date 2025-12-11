@@ -2,9 +2,9 @@ package com.example.agentplayground.service;
 
 import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,18 +12,14 @@ import java.util.Set;
 public class AzureAiService {
 
     private final Map<String, AzureOpenAiChatModel> models;
-    private final com.example.agentplayground.config.AzureMultiModelProperties properties;
 
     @Autowired
-    public AzureAiService(
-            @org.springframework.beans.factory.annotation.Value("#{springAiChatModels}") Map<String, AzureOpenAiChatModel> models,
-            com.example.agentplayground.config.AzureMultiModelProperties properties) {
+    public AzureAiService(@Value("#{springAiChatModels}") Map<String, AzureOpenAiChatModel> models) {
         this.models = models;
-        this.properties = properties;
     }
 
     public Set<String> getSupportedModels() {
-        return properties.getModels().keySet();
+        return models.keySet();
     }
 
     public String chat(String modelName, String message) {
