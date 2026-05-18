@@ -88,14 +88,21 @@ public class AzureMultiModelProperties {
 
     @Bean
     public AzureOpenAiStreamingChatModel azureOpenAiStreamingChatModel() {
+        AiModelConfig config = models.values().stream()
+            .filter(c -> c.getApiKey() != null && !c.getApiKey().isBlank()
+                      && c.getEndpoint() != null && !c.getEndpoint().isBlank()
+                      && c.getDeploymentName() != null && !c.getDeploymentName().isBlank())
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("No valid model configuration found for streaming"));
+
         return AzureOpenAiStreamingChatModel
             .builder()
             .timeout(Duration.of(3, ChronoUnit.MINUTES))
             .maxRetries(2)
             .responseFormat(ResponseFormat.JSON)
-            .apiKey("${AZURE_OPENAI_API_KEY}")
-            .endpoint("${AZURE_OPENAI_ENDPOINT}")
-            .deploymentName("gpt-5.1")
+            .apiKey(config.getApiKey())
+            .endpoint(config.getEndpoint())
+            .deploymentName(config.getDeploymentName())
             .build();
     }
 
