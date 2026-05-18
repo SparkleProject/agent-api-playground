@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   autoconfigure:
     exclude:
       - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
@@ -15,22 +18,39 @@ spring:
   ai:
     azure:
       openai:
-        # Default/Single configuration (optional, if you want to keep it or just use the map)
-        api-key: ${AZURE_OPENAI_API_KEY:}
-        endpoint: ${AZURE_OPENAI_ENDPOINT:}
         
         # Multi-model configuration
         models:
-
-          gpt-4:
-             api-key: ${AZURE_OPENAI_GPT4_API_KEY:${AZURE_OPENAI_API_KEY:}}
-             endpoint: ${AZURE_OPENAI_ENDPOINT:}
-             deployment-name: ${AZURE_OPENAI_GPT4_DEPLOYMENT_NAME:}
-          gpt-4-1:
+          gpt-wave:
+            display-name: gpt-wave
+            api-key: ${AZURE_OPENAI_GPT41_API_KEY:${AZURE_OPENAI_API_KEY:}}
+            endpoint: ${AZURE_OPENAI_ENDPOINT:}
+            deployment-name: ${AZURE_OPENAI_GPT5_DEPLOYMENT_NAME:}
+          gpt-5-1:
+             display-name: ${AZURE_OPENAI_GPT5_DEPLOYMENT_NAME:}
              api-key: ${AZURE_OPENAI_GPT41_API_KEY:${AZURE_OPENAI_API_KEY:}}
              endpoint: ${AZURE_OPENAI_ENDPOINT:}
-             deployment-name: ${AZURE_OPENAI_GPT41_DEPLOYMENT_NAME:}
-
+             deployment-name: ${AZURE_OPENAI_GPT5_DEPLOYMENT_NAME:}
+          gemini-3-pro:
+            display-name: gemini-3-pro
+            api-key: ${GOOGLE_AI_API_KEY:}
+            endpoint: ${GOOGLE_AI_ENDPOINT:}
+            deployment-name: ${GOOGLE_AI_GEMINI3_PRO_DEPLOYMENT_NAME:}
+          gemini-3-flash:
+            display-name: gemini-3-flash
+            api-key: ${GOOGLE_AI_API_KEY:}
+            endpoint: ${GOOGLE_AI_ENDPOINT:}
+            deployment-name: ${GOOGLE_AI_GEMINI3_FLASH_DEPLOYMENT_NAME:}
+          gemini-3-pro-wave:
+            display-name: gemini-3-pro-wave
+            api-key: ${GOOGLE_AI_API_KEY:}
+            endpoint: ${GOOGLE_AI_ENDPOINT:}
+            deployment-name: ${GOOGLE_AI_GEMINI3_PRO_DEPLOYMENT_NAME:}
+          gemini-3-flash-wave:
+            display-name: gemini-3-flash-wave
+            api-key: ${GOOGLE_AI_API_KEY:}
+            endpoint: ${GOOGLE_AI_ENDPOINT:}
+            deployment-name: ${GOOGLE_AI_GEMINI3_FLASH_DEPLOYMENT_NAME:}
 
 server:
   port: 8080
